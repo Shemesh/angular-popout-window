@@ -1,0 +1,22 @@
+
+<button (click)="this.showPopOut = !this.showPopOut">DO IT!</button>
+<br />
+<label>
+  <input [(ngModel)]="someJah" />
+</label>
+<h1>start here</h1>
+
+<app-popout-window [(popOut)]="this.showPopOut">
+  <div class="div1" style="border: 1px solid gray">
+    <h2>is popout <span style="font-size: 12px">(this.showPopOut)</span>: {{this.showPopOut}}</h2>
+    <label>
+      <input [(ngModel)]="someJah" />
+    </label>
+    <br />
+    <button (click)="this.showPopOut = !this.showPopOut">DON'T PANIC</button>
+<!--    <app-ng-start></app-ng-start>-->
+  </div>
+</app-popout-window>
+
+<h1>the end</h1>
+
