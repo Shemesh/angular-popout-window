@@ -4,11 +4,9 @@ import {
   Component,
   ComponentFactoryResolver,
   ElementRef,
-  EventEmitter,
+  HostListener,
   Injector,
-  Input,
-  Output,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import {CdkPortal, DomPortalOutlet} from '@angular/cdk/portal';
 
@@ -24,6 +22,14 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   private externalWindow: Window;
   private inPlaceHost: DomPortalOutlet;
+
+  @HostListener('window:unload')
+  private unloadHandler(): void {
+    if (this.externalWindow) {
+      this.externalWindow.close();
+      this.externalWindow = null;
+    }
+  }
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -64,6 +70,10 @@ export class PopoutWindowComponent implements AfterViewInit {
         'appPopoutWindow',
         'width=600,height=400,left=1200,top=100'
       );
+
+      document.querySelectorAll('link, style').forEach(htmlElement => {
+        this.externalWindow.document.head.appendChild(htmlElement.cloneNode(true));
+      });
 
       const host = new DomPortalOutlet(
         this.externalWindow.document.body,
