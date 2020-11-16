@@ -1,27 +1,11 @@
-# AngularPopoutChildwindow
+# Angular Popout Child Window
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.1.
+with this component you can very simply popout part of your Angular application to a new child window.
 
-## Development server
+it is work in progress, use on your own risk.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+not yet published to NPM
 
-## Code scaffolding
+the component itself is [PopoutWindowComponent](https://github.com/Shemesh/angular-popout/blob/master/src/app/popout-window/popout-window.component.ts).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+please run the demo app to see some funky stuff.
