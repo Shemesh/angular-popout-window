@@ -3,29 +3,25 @@ import {
   ApplicationRef,
   Component,
   ComponentFactoryResolver,
-  ElementRef,
   HostListener,
   Injector,
   ViewChild
 } from '@angular/core';
-import {CdkPortal, DomPortalOutlet} from '@angular/cdk/portal';
+import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-popout-window',
   template: `
-    <ng-container *cdkPortal>
-      <ng-content></ng-content>
-    </ng-container>
-    <div #inPlace></div>
+    <ng-content *cdkPortal></ng-content>
+    <ng-container *cdkPortalOutlet></ng-container>
   `
 })
 
 export class PopoutWindowComponent implements AfterViewInit {
   @ViewChild(CdkPortal) portal: CdkPortal;
-  @ViewChild('inPlace', { read: ElementRef }) inPlace: ElementRef;
+  @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   private externalWindow: Window;
-  private inPlaceHost: DomPortalOutlet;
 
   @HostListener('window:unload')
   private unloadHandler(): void {
@@ -42,18 +38,12 @@ export class PopoutWindowComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.inPlaceHost = new DomPortalOutlet(
-      this.inPlace.nativeElement,
-      this.componentFactoryResolver,
-      this.applicationRef,
-      this.injector
-    );
     this.doPopIn();
   }
 
   public doPopIn(): void {
-    if (!this.inPlaceHost.hasAttached()) {
-      this.inPlaceHost.attach(this.portal);
+    if (!this.portalOutlet.hasAttached()) {
+      this.portalOutlet.attach(this.portal);
     }
 
     if (this.externalWindow) {
@@ -65,9 +55,6 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   public doPopOut(): void {
     if (!this.externalWindow) {
-      if (this.inPlaceHost.hasAttached()) {
-        this.inPlaceHost.detach();
-      }
 
       this.externalWindow = window.open(
         '',
@@ -85,6 +72,9 @@ export class PopoutWindowComponent implements AfterViewInit {
         this.applicationRef,
         this.injector
       );
+      if (this.portalOutlet.hasAttached()) {
+        this.portalOutlet.detach();
+      }
       host.attach(this.portal);
 
       this.externalWindow.addEventListener('unload', () => {
