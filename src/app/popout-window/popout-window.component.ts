@@ -19,24 +19,11 @@ import {CdkPortal, DomPortalOutlet} from '@angular/cdk/portal';
 })
 
 export class PopoutWindowComponent implements AfterViewInit {
-  private popOut1: boolean;
-  get popOut(): boolean {
-    return this.popOut1;
-  }
-  @Input() set popOut(value: boolean) {
-    this.popOut1 = value;
-    if (value) {
-      this.doPopOut();
-    } else {
-      this.doPopIn();
-    }
-    this.popOutChange.emit(value);
-  }
-  @Output() popOutChange = new EventEmitter<boolean>();
   @ViewChild(CdkPortal) portal: CdkPortal;
   @ViewChild('inPlace', { read: ElementRef }) inPlace: ElementRef;
 
   private externalWindow = null;
+  private inPlaceHost: DomPortalOutlet;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -45,21 +32,20 @@ export class PopoutWindowComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.popOut = false;
-  }
-
-  private doPopIn(): void {
-    if (!this.inPlace || !this.inPlace.nativeElement){
-      return;
-    }
-    const inPlaceHost = new DomPortalOutlet(
+    this.inPlaceHost = new DomPortalOutlet(
       this.inPlace.nativeElement,
       this.componentFactoryResolver,
       this.applicationRef,
       this.injector
     );
+    this.doPopIn();
+  }
 
-    inPlaceHost.attach(this.portal);
+  public doPopIn(): void {
+    if (!this.inPlaceHost.hasAttached()) {
+      this.inPlaceHost.attach(this.portal);
+    }
+
     if (this.externalWindow) {
       this.externalWindow.close();
       this.externalWindow = null;
@@ -67,27 +53,34 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   }
 
-  private doPopOut(): void {
+  public doPopOut(): void {
     if (!this.externalWindow) {
+      if (this.inPlaceHost.hasAttached()) {
+        this.inPlaceHost.detach();
+      }
+
       this.externalWindow = window.open(
         '',
-        'MyNameIs',
-        'width=600,height=400,left=900,top=500'
+        'appPopoutWindow',
+        'width=600,height=400,left=1200,top=100'
       );
+
+      const host = new DomPortalOutlet(
+        this.externalWindow.document.body,
+        this.componentFactoryResolver,
+        this.applicationRef,
+        this.injector
+      );
+      host.attach(this.portal);
+
+      this.externalWindow.addEventListener('beforeunload', () => {
+        if (!this.inPlaceHost.hasAttached()) {
+          this.inPlaceHost.attach(this.portal);
+          host.dispose();
+        }
+      });
+    } else {
+      this.externalWindow.focus();
     }
-
-    const host = new DomPortalOutlet(
-      this.externalWindow.document.body,
-      this.componentFactoryResolver,
-      this.applicationRef,
-      this.injector
-    );
-
-    host.attach(this.portal);
-
-    this.externalWindow.addEventListener('beforeunload', () => {
-      this.popOut = false;
-    });
   }
 }
-
