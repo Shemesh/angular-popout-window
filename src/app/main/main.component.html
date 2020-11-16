@@ -1,24 +1,24 @@
 
-<button (click)="windowComponent.doPopOut()">pop it Out</button>
+<button (click)="windowComponent.doPopOut()" style="margin-right: 10px">pop it Out</button>
 <button (click)="windowComponent.doPopIn()">back inside</button>
-<br />
+<br /><br />
 <label>
   <input [(ngModel)]="someJah" />
 </label>
 <h1>start here</h1>
-
+<hr>
 <app-popout-window #windowComponent>
   <div class="div1" style="border: 1px solid gray; padding: 10px">
     <label class="label1">
       <input [(ngModel)]="someJah" />
     </label>
     <br />
-    <button (click)="windowComponent.doPopOut()">pop me Out</button>
+    <button (click)="windowComponent.doPopOut()"style="margin-right: 10px">pop me Out</button>
     <button (click)="windowComponent.doPopIn()">take me inside</button>
 
     <!--    <app-ng-start></app-ng-start>-->
   </div>
 </app-popout-window>
-
+<hr>
 <h1>the end</h1>
 

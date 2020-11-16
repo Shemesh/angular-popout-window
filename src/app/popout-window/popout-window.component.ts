@@ -12,8 +12,12 @@ import {CdkPortal, DomPortalOutlet} from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-popout-window',
-  templateUrl: './popout-window.component.html',
-  styleUrls: ['./popout-window.component.css'],
+  template: `
+    <ng-container *cdkPortal>
+      <ng-content></ng-content>
+    </ng-container>
+    <div #inPlace></div>
+  `
 })
 
 export class PopoutWindowComponent implements AfterViewInit {
