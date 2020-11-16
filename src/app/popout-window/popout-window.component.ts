@@ -22,7 +22,7 @@ export class PopoutWindowComponent implements AfterViewInit {
   @ViewChild(CdkPortal) portal: CdkPortal;
   @ViewChild('inPlace', { read: ElementRef }) inPlace: ElementRef;
 
-  private externalWindow = null;
+  private externalWindow: Window;
   private inPlaceHost: DomPortalOutlet;
 
   constructor(
@@ -73,11 +73,8 @@ export class PopoutWindowComponent implements AfterViewInit {
       );
       host.attach(this.portal);
 
-      this.externalWindow.addEventListener('beforeunload', () => {
-        if (!this.inPlaceHost.hasAttached()) {
-          this.inPlaceHost.attach(this.portal);
-          host.dispose();
-        }
+      this.externalWindow.addEventListener('unload', () => {
+        this.doPopIn();
       });
     } else {
       this.externalWindow.focus();
