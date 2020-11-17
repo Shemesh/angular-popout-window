@@ -8,6 +8,7 @@ import {ApplicationRef, Component, OnInit} from '@angular/core';
 export class MainComponent implements OnInit {
 
   public someJah = '321';
+  isChecked: any;
 
   constructor(private appRef: ApplicationRef) { }
 

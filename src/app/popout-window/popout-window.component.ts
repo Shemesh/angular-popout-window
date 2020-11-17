@@ -4,7 +4,7 @@ import {
   Component,
   ComponentFactoryResolver,
   HostListener,
-  Injector,
+  Injector, Input,
   ViewChild
 } from '@angular/core';
 import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
@@ -20,6 +20,9 @@ import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
 export class PopoutWindowComponent implements AfterViewInit {
   @ViewChild(CdkPortal) portal: CdkPortal;
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
+
+  @Input() windowWidth: number;
+  @Input() windowHeight: number;
 
   private externalWindow: Window;
 
@@ -55,11 +58,14 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   public doPopOut(): void {
     if (!this.externalWindow) {
+      const elmRect = this.portal.templateRef.elementRef.nativeElement.nextElementSibling.getBoundingClientRect();
 
       this.externalWindow = window.open(
         '',
         'appPopoutWindow',
-        'width=600,height=400,left=1200,top=100'
+        `width=${this.windowWidth > 99 ? this.windowWidth : elmRect.width + 16},
+        height=${this.windowHeight > 99 ? this.windowHeight : elmRect.height + 17},
+        left=1200,top=100`
       );
 
       document.querySelectorAll('link, style').forEach(htmlElement => {
