@@ -1,6 +1,6 @@
 # Angular Popout Child Window
 
-with this component you can very simply popout part of your Angular application to a new child window.
+with this component you can very simply popout part of your Angular application to a new not docked child window.
 
 it is work in progress, use on your own risk.
 
