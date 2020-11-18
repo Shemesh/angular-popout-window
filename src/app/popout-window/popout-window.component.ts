@@ -3,8 +3,10 @@ import {
   ApplicationRef,
   Component,
   ComponentFactoryResolver,
+  ElementRef,
   HostListener,
-  Injector, Input,
+  Injector,
+  Input,
   ViewChild
 } from '@angular/core';
 import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
@@ -13,13 +15,16 @@ import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
   selector: 'app-popout-window',
   template: `
     <ng-content *cdkPortal></ng-content>
-    <ng-container *cdkPortalOutlet></ng-container>
+    <div #innerOutletWrapper>
+      <ng-container *cdkPortalOutlet></ng-container>
+    </div>
   `
 })
 
 export class PopoutWindowComponent implements AfterViewInit {
   @ViewChild(CdkPortal) portal: CdkPortal;
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
+  @ViewChild('innerOutletWrapper') innerOutletWrapper: ElementRef;
 
   @Input() windowWidth: number;
   @Input() windowHeight: number;
@@ -60,7 +65,7 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   public doPopOut(): void {
     if (!this.externalWindow) {
-      const elmRect = this.portal.origin.nativeElement.parentElement.getBoundingClientRect();
+      const elmRect = this.innerOutletWrapper.nativeElement.getBoundingClientRect();
 
       const navHeight = window.outerHeight - window.innerHeight;
       const navWidth = window.outerWidth - window.innerWidth;
