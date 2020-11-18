@@ -45,8 +45,13 @@
     <br />
     <button (click)="windowComponent.doPopOut()" style="margin-right: 10px">pop me Out</button>
     <button (click)="windowComponent.doPopIn()">take me inside</button>
-
-    <app-ng-start *ngIf="this.isChecked"></app-ng-start>
+  </div>
+  <app-ng-start *ngIf="this.isChecked"></app-ng-start>
+  <div class="textarea1">
+    <label>
+      experiment here:<br />
+      <textarea style="width: 500px; height: 90px">- try resizing this textarea to see how it behaves when poping in and out.&#013; &#010;- add\remove text to see how it is preserved without it being binded</textarea>
+    </label>
   </div>
 </app-popout-window>
 <hr>

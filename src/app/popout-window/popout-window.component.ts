@@ -60,7 +60,7 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   public doPopOut(): void {
     if (!this.externalWindow) {
-      const elmRect = this.portal.templateRef.elementRef.nativeElement.nextElementSibling.getBoundingClientRect();
+      const elmRect = this.portal.origin.nativeElement.parentElement.getBoundingClientRect();
 
       const navHeight = window.outerHeight - window.innerHeight;
       const navWidth = window.outerWidth - window.innerWidth;
