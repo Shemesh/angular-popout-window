@@ -1,21 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MainComponent } from './main/main.component';
-import { PopoutWindowComponent } from './popout-window/popout-window.component';
 import {FormsModule} from '@angular/forms';
-import {PortalModule} from '@angular/cdk/portal';
 import { NgStartComponent } from './ng-start/ng-start.component';
+import {PopoutWindowModule} from '../../projects/popout-window/src/lib/popout-window.module';
 
 @NgModule({
   declarations: [
     MainComponent,
-    PopoutWindowComponent,
     NgStartComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    PortalModule
+    PopoutWindowModule
   ],
   providers: [],
   bootstrap: [MainComponent]

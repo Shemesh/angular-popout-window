@@ -12,7 +12,8 @@ import {
 import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
 
 @Component({
-  selector: 'app-popout-window',
+  // tslint:disable-next-line:component-selector
+  selector: 'popout-window',
   template: `
     <ng-content *cdkPortal></ng-content>
     <div #innerOutletWrapper>

@@ -118,6 +118,46 @@
           }
         }
       }
+    },
+    "popout-window": {
+      "projectType": "library",
+      "root": "projects/popout-window",
+      "sourceRoot": "projects/popout-window/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/popout-window/tsconfig.lib.json",
+            "project": "projects/popout-window/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/popout-window/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/popout-window/src/test.ts",
+            "tsConfig": "projects/popout-window/tsconfig.spec.json",
+            "karmaConfig": "projects/popout-window/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/popout-window/tsconfig.lib.json",
+              "projects/popout-window/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "angular-popout-childwindow"
