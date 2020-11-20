@@ -1,11 +1,27 @@
 {
-  "name": "popout-window",
-  "version": "0.0.1",
+  "name": "angular-popout-window",
+  "version": "1.0.2",
+  "description": "Angular library to popout part of your application to a new un-docked child window.",
+  "license": "MIT",
+  "homepage": "https://github.com/Shemesh/angular-popout",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shemesh/angular-popout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shemesh/angular-popout/issues"
+  },
   "peerDependencies": {
-    "@angular/common": "^11.0.0",
-    "@angular/core": "^11.0.0"
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
-  }
+  },
+  "keywords": [
+    "angular",
+    "popout",
+    "child window",
+    "undock"
+  ]
 }
