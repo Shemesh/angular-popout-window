@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-popout-childwindow": {
+    "angular-popout-window": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/angular-popout-childwindow",
+            "outputPath": "dist/angular-popout-window",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-popout-childwindow:build"
+            "browserTarget": "angular-popout-window:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-popout-childwindow:build:production"
+              "browserTarget": "angular-popout-window:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-popout-childwindow:build"
+            "browserTarget": "angular-popout-window:build"
           }
         },
         "test": {
@@ -109,11 +109,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "angular-popout-childwindow:serve"
+            "devServerTarget": "angular-popout-window:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "angular-popout-childwindow:serve:production"
+              "devServerTarget": "angular-popout-window:serve:production"
             }
           }
         }
@@ -160,5 +160,5 @@
       }
     }
   },
-  "defaultProject": "angular-popout-childwindow"
+  "defaultProject": "angular-popout-window"
 }
