@@ -1,4 +1,5 @@
-import {ApplicationRef, Component, OnInit} from '@angular/core';
+import {ApplicationRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {CdkDragMove} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-main',
@@ -7,13 +8,31 @@ import {ApplicationRef, Component, OnInit} from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  public someJah = '321';
+  jahBless = 'Jah Bless';
   isChecked: any;
+  private rect;
 
-  constructor(private appRef: ApplicationRef) { }
+  @ViewChild('resizableDiv') resizableDiv: ElementRef;
+  @ViewChild('resizer') resizer: ElementRef;
+
+  constructor() { }
 
   ngOnInit(): void {
   }
 
+  resizerMoved(event: CdkDragMove): void {
+    const newW = this.rect.width + event.distance.x;
+    const newH = this.rect.height + event.distance.y;
+    if (newW > 350) {
+      this.resizableDiv.nativeElement.style.width = `${newW}px`;
+    }
+    if (newH > 300) {
+      this.resizableDiv.nativeElement.style.height = `${newH}px`;
+    }
+    this.resizer.nativeElement.style.transform = `translate3d(0, 0, 0)`;
+  }
 
+  dragStart(): void {
+    this.rect  = this.resizableDiv.nativeElement.getBoundingClientRect();
+  }
 }

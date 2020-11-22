@@ -1,58 +1,71 @@
-<button (click)="windowComponent.doPopOut()" style="margin-right: 10px">pop it Out</button>
-<button (click)="windowComponent.doPopIn()">back inside</button>
-<br /><br />
-<details class="details1">
+<div style="background-color: #eee">
+  <h1 style="display: inline-block">Angular Popout Window</h1>
+  <a href="https://www.npmjs.com/package/angular-popout-window" style="margin-right: 15px; margin-left: 15px;">npm</a>
+  <a href="https://github.com/Shemesh/angular-popout-window">github</a>
+</div>
+<br />
+<div>
+  take an action:
+  <button (click)="windowComponent.popOut()" style="margin-right: 10px">pop it Out</button>
+  <button (click)="windowComponent.popIn()">back inside</button>
+</div>
+<br />
+<p>- notice how all style (including inherited) are preserved when poped out</p>
+<details class="details">
   <summary>expand for more stuff</summary>
   <div>
     <label>
-      someJah =
-      <input [(ngModel)]="someJah"/>
+      binding jahBless:
+      <input [(ngModel)]="jahBless"/>
+      works from both in and out
     </label><br/><br/>
     <label>
       windowWidth
       <input [(ngModel)]="windowComponent.windowWidth" type="number" style="max-width: 100px;"/>
-      if less then 100 then width is the content width
+      if less then 100 then width is the <b>content width</b>
     </label><br/><br/>
     <label>
       windowHeight
       <input [(ngModel)]="windowComponent.windowHeight" type="number" style="max-width: 100px;"/>
-      if less then 100 then height is the content height
+      if less then 100 then height is the <b>content height</b>
     </label><br/><br/>
     <label>
       windowLeft
       <input [(ngModel)]="windowComponent.windowLeft" type="number" style="max-width: 100px;"/>
-      if empty then positioned per content position
+      if empty then positioned per <b>content position</b>
     </label><br/><br/>
     <label>
       windowTop
       <input [(ngModel)]="windowComponent.windowTop" type="number" style="max-width: 100px;"/>
-      if empty then positioned per content position
+      if empty then positioned per <b>content position</b>
     </label><br/><br/>
     <label>
-      large content
+      show large content
       <input type="checkbox" [(ngModel)]="this.isChecked"/>
     </label>
   </div>
 </details>
-<h1>start here</h1>
-<hr>
-<popout-window #windowComponent>
-  <div class="div1" style="border: 7px solid gray; padding: 10px">
-    <label class="label1">
-      someJah =
-      <input [(ngModel)]="someJah" />
-    </label>
-    <br />
-    <button (click)="windowComponent.doPopOut()" style="margin-right: 10px">pop me Out</button>
-    <button (click)="windowComponent.doPopIn()">take me inside</button>
-  </div>
-  <app-ng-start *ngIf="this.isChecked"></app-ng-start>
-  <div class="textarea1">
-    <label>
-      experiment here:<br />
-      <textarea style="width: 500px; height: 90px">- try resizing this textarea to see how it behaves when poping in and out.&#013; &#010;- add\remove text to see how it is preserved without it being binded</textarea>
-    </label>
-  </div>
-</popout-window>
-<hr>
-<h1>the end</h1>
+<h2>&lt;popout-window&gt;</h2>
+<div class="resizable" #resizableDiv>
+  <popout-window #windowComponent>
+    <div class="div1" style="border: 7px solid gray; padding: 10px" >
+      <label class="label1">
+        binding jahBless:
+        <input [(ngModel)]="jahBless" />
+      </label>
+      <br />
+      <button (click)="windowComponent.popOut()" style="margin-right: 10px">pop me Out</button>
+      <button (click)="windowComponent.popIn()">take me inside</button>
+    </div>
+    <app-ng-start *ngIf="this.isChecked"></app-ng-start>
+    <div class="textarea1">
+      <label>
+        it is the same instance of the html dom elements:<br />
+        <textarea style="width: 100%; height: 90px">change the text to see how it is preserved without binding&#013; &#010;the textarea size is also preserved, resize to try.</textarea>
+      </label>
+    </div>
+  </popout-window>
+  <div class="resizer" #resizer cdkDrag
+       (cdkDragStarted)="dragStart()" (cdkDragMoved)="resizerMoved($event)">drag to resize</div>
+</div>
+<h2>&lt;/popout-window&gt;</h2>

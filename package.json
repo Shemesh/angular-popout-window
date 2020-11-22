@@ -14,7 +14,8 @@
     "build-lib-prod": "ng build popout-window --prod",
     "copy-license-to-lib": "cpx ./LICENSE ./projects/popout-window",
     "copy-readme-to-lib": "cpx ./README.md ./projects/popout-window",
-    "do-the-lib": "npm run copy-license-to-lib && npm run copy-readme-to-lib && npm run build-lib-prod"
+    "do-the-lib": "npm run copy-license-to-lib && npm run copy-readme-to-lib && npm run build-lib-prod",
+    "build-to-docs": "ng build --prod --output-path docs --base-href /angular-popout-window/"
   },
   "private": true,
   "dependencies": {

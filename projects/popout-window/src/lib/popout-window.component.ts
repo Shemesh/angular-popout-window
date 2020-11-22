@@ -16,7 +16,7 @@ import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
   selector: 'popout-window',
   template: `
     <ng-content *cdkPortal></ng-content>
-    <div #innerOutletWrapper>
+    <div #innerOutletWrapper style="width: 100%; height: 100%; overflow: auto;">
       <ng-container *cdkPortalOutlet></ng-container>
     </div>
   `
@@ -49,10 +49,10 @@ export class PopoutWindowComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.doPopIn();
+    this.popIn();
   }
 
-  public doPopIn(): void {
+  public popIn(): void {
     if (!this.portalOutlet.hasAttached()) {
       this.portalOutlet.attach(this.portal);
     }
@@ -64,7 +64,7 @@ export class PopoutWindowComponent implements AfterViewInit {
 
   }
 
-  public doPopOut(): void {
+  public popOut(): void {
     if (!this.externalWindow) {
       const elmRect = this.innerOutletWrapper.nativeElement.getBoundingClientRect();
 
@@ -106,7 +106,7 @@ export class PopoutWindowComponent implements AfterViewInit {
       host.attach(this.portal);
 
       this.externalWindow.addEventListener('unload', () => {
-        this.doPopIn();
+        this.popIn();
       });
     } else {
       this.externalWindow.focus();

@@ -1,6 +1,6 @@
 * {
   font-family: cursive, sans-serif;
-  color: crimson;
+  color: #4d61d4;
 }
 .div1 {
   background-color: bisque;
@@ -12,11 +12,24 @@
   }
 }
 
-.details1 > div {
+.details > div {
   padding: 10px 30px;
 }
 
 .textarea1 {
-  margin-top: 22px;
+  margin: 20px 20px 100px;
 }
 
+.resizable {
+  position: relative;
+  border: 1px dotted gray;
+  .resizer {
+    cursor: move;
+    height: 20px;
+    width: 110px;
+    background-color: lightgray;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}
