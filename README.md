@@ -7,7 +7,7 @@ with this component you can very simply popout any part of your Angular applicat
 
 try the [online demo](https://shemesh.github.io/angular-popout-window/) to see some funky stuff.
 
-the component itself is **PopoutWindowComponent** 
+supports opening several child windows.
 
 thriving for a minimal footprint, ease of use, clean and compatible code. 
 

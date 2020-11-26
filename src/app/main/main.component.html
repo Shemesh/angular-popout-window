@@ -22,22 +22,27 @@
     <label>
       windowWidth
       <input [(ngModel)]="windowComponent.windowWidth" type="number" style="max-width: 100px;"/>
-      if less then 100 then width is the <b>content width</b>
+      if less then 100 then width is the <b>content width</b>.
     </label><br/><br/>
     <label>
       windowHeight
       <input [(ngModel)]="windowComponent.windowHeight" type="number" style="max-width: 100px;"/>
-      if less then 100 then height is the <b>content height</b>
+      if less then 100 then height is the <b>content height</b>.
     </label><br/><br/>
     <label>
       windowLeft
       <input [(ngModel)]="windowComponent.windowLeft" type="number" style="max-width: 100px;"/>
-      if empty then positioned per <b>content position</b>
+      if empty then positioned per <b>content position</b>.
     </label><br/><br/>
     <label>
       windowTop
       <input [(ngModel)]="windowComponent.windowTop" type="number" style="max-width: 100px;"/>
-      if empty then positioned per <b>content position</b>
+      if empty then positioned per <b>content position</b>.
+    </label><br/><br/>
+    <label>
+      windowTitle
+      <input [(ngModel)]="windowComponent.windowTitle"/>
+      if empty then title is derived from main app title.
     </label><br/><br/>
     <label>
       show large content

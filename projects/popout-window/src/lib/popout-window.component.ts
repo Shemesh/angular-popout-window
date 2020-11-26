@@ -31,6 +31,7 @@ export class PopoutWindowComponent implements AfterViewInit {
   @Input() windowHeight: number;
   @Input() windowLeft: number;
   @Input() windowTop: number;
+  @Input() windowTitle: string;
 
   private externalWindow: Window;
 
@@ -76,7 +77,7 @@ export class PopoutWindowComponent implements AfterViewInit {
 
       this.externalWindow = window.open(
         '',
-        'appPopoutWindow',
+        `popoutWindow${Date.now()}`,
         `width=${this.windowWidth > 99 ? this.windowWidth : elmRect.width},
         height=${this.windowHeight > 99 ? this.windowHeight : elmRect.height + 1},
         left=${winLeft},
@@ -104,6 +105,8 @@ export class PopoutWindowComponent implements AfterViewInit {
         this.portalOutlet.detach();
       }
       host.attach(this.portal);
+
+      this.externalWindow.document.title = this.windowTitle ? this.windowTitle : window.document.title;
 
       this.externalWindow.addEventListener('unload', () => {
         this.popIn();
