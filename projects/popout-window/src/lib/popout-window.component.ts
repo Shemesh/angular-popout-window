@@ -92,7 +92,13 @@ export class PopoutWindowComponent implements AfterViewInit {
       }
 
       document.querySelectorAll('link, style').forEach(htmlElement => {
-        this.externalWindow.document.head.appendChild(htmlElement.cloneNode(true));
+        const elClone = (htmlElement.cloneNode(true) as HTMLElement);
+        if (elClone.tagName.toLowerCase() === 'link'
+          && elClone.getAttribute('href')
+          && elClone.getAttribute('href').indexOf('http') !== 0) {
+          elClone.setAttribute('href', document.location.origin + document.location.pathname + elClone.getAttribute('href'));
+        }
+        this.externalWindow.document.head.appendChild(elClone);
       });
 
       const host = new DomPortalOutlet(
