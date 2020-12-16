@@ -53,9 +53,9 @@ you can override this by explicitly setting each of those properties for the new
 - `windowWidth` - width of window in pixels.
 - `windowHeight`  - height of window in pixels.
 
-when the poped out child window is closed, by pressing its X button for example, it will run `popIn()` to bring the content back inside.
+when the popped out child window is closed, by pressing its X button for example, it will run `popIn()` to bring the content back inside.
 
-when the main page unload the poped window is closed.
+when the main page unload the popped window is closed.
 
 ## License
 

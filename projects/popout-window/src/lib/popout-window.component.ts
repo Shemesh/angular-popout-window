@@ -6,7 +6,7 @@ import {
   ElementRef,
   HostListener,
   Injector,
-  Input,
+  Input, OnDestroy,
   ViewChild
 } from '@angular/core';
 import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
@@ -22,25 +22,30 @@ import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
   `
 })
 
-export class PopoutWindowComponent implements AfterViewInit {
-  @ViewChild(CdkPortal) portal: CdkPortal;
-  @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
-  @ViewChild('innerOutletWrapper') innerOutletWrapper: ElementRef;
+export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
+
+  @ViewChild(CdkPortal) private portal: CdkPortal;
+  @ViewChild(CdkPortalOutlet) private portalOutlet: CdkPortalOutlet;
+  @ViewChild('innerOutletWrapper') private innerOutletWrapper: ElementRef;
 
   @Input() windowWidth: number;
   @Input() windowHeight: number;
   @Input() windowLeft: number;
   @Input() windowTop: number;
   @Input() windowTitle: string;
+  @Input() windowStyle: string;
+  @Input() windowStyleUrl: string;
+  @Input() suppressCloneStyles = false;
+  @Input() get isPoppedOut(): boolean {
+    return this.isOut;
+  }
 
-  private externalWindow: Window;
+  private popoutWindow: Window;
+  private isOut = false;
 
-  @HostListener('window:unload')
-  private unloadHandler(): void {
-    if (this.externalWindow) {
-      this.externalWindow.close();
-      this.externalWindow = null;
-    }
+  @HostListener('window:beforeunload')
+  private beforeunloadHandler(): void {
+    this.close();
   }
 
   constructor(
@@ -53,20 +58,28 @@ export class PopoutWindowComponent implements AfterViewInit {
     this.popIn();
   }
 
+  ngOnDestroy(): void {
+    this.close();
+  }
+
+  private close(): void {
+    if (this.popoutWindow) {
+      this.popoutWindow.close();
+      this.popoutWindow = null;
+      this.isOut = false;
+    }
+  }
+
   public popIn(): void {
     if (!this.portalOutlet.hasAttached()) {
       this.portalOutlet.attach(this.portal);
     }
 
-    if (this.externalWindow) {
-      this.externalWindow.close();
-      this.externalWindow = null;
-    }
-
+    this.close();
   }
 
   public popOut(): void {
-    if (!this.externalWindow) {
+    if (!this.popoutWindow) {
       const elmRect = this.innerOutletWrapper.nativeElement.getBoundingClientRect();
 
       const navHeight = window.outerHeight - window.innerHeight;
@@ -75,7 +88,7 @@ export class PopoutWindowComponent implements AfterViewInit {
       const winLeft = this.windowLeft || window.screenX + navWidth + elmRect.left;
       const winTop = this.windowTop || window.screenY + navHeight + elmRect.top;
 
-      this.externalWindow = window.open(
+      this.popoutWindow = window.open(
         '',
         `popoutWindow${Date.now()}`,
         `width=${this.windowWidth > 99 ? this.windowWidth : elmRect.width},
@@ -83,36 +96,60 @@ export class PopoutWindowComponent implements AfterViewInit {
         left=${winLeft},
         top=${winTop}`
       );
-      this.externalWindow.document.body.style.margin = '0';
 
-      if (!this.windowTop) {
-        setTimeout(() => {
-          this.externalWindow.moveBy(0, this.externalWindow.innerHeight - this.externalWindow.outerHeight);
-        }, 50);
-      }
+      this.popoutWindow.onload = ( () => {
+        this.popoutWindow.document.title = this.windowTitle ? this.windowTitle : window.document.title;
+        this.popoutWindow.document.body.style.margin = '0';
 
-      document.querySelectorAll('link, style').forEach(htmlElement => {
-        this.externalWindow.document.head.appendChild(htmlElement.cloneNode(true));
+        if (!this.suppressCloneStyles) {
+          document.head.querySelectorAll('style').forEach(node => {
+            this.popoutWindow.document.head.appendChild(node.cloneNode(true));
+          });
+
+          document.head.querySelectorAll('link[rel="stylesheet"]').forEach(node => {
+            this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
+              `<link rel="stylesheet" type="${(node as HTMLLinkElement).type}" href="${(node as HTMLLinkElement).href}">`);
+          });
+
+          (document as any).fonts.forEach(node => {
+            (this.popoutWindow.document as any).fonts.add(node);
+          });
+        }
+
+        if (this.windowStyleUrl) {
+          this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
+            `<link rel="stylesheet" type="text/css" href="${window.location.origin}/${this.windowStyleUrl}">`);
+        }
+
+        if (this.windowStyle) {
+          this.popoutWindow.document.head.insertAdjacentHTML('beforeend', `<style>${this.windowStyle}</style>`);
+        }
+
+        if (!this.windowTop) {
+          setTimeout(() => {
+            this.popoutWindow.moveBy(this.popoutWindow.innerWidth - this.popoutWindow.outerWidth,
+              this.popoutWindow.innerHeight - this.popoutWindow.outerHeight);
+          }, 50);
+        }
+
+        const host = new DomPortalOutlet(
+          this.popoutWindow.document.body,
+          this.componentFactoryResolver,
+          this.applicationRef,
+          this.injector
+        );
+        if (this.portalOutlet.hasAttached()) {
+          this.portalOutlet.detach();
+        }
+        host.attach(this.portal);
       });
+      this.isOut = true;
 
-      const host = new DomPortalOutlet(
-        this.externalWindow.document.body,
-        this.componentFactoryResolver,
-        this.applicationRef,
-        this.injector
-      );
-      if (this.portalOutlet.hasAttached()) {
-        this.portalOutlet.detach();
-      }
-      host.attach(this.portal);
-
-      this.externalWindow.document.title = this.windowTitle ? this.windowTitle : window.document.title;
-
-      this.externalWindow.addEventListener('unload', () => {
+      this.popoutWindow.addEventListener('unload', () => {
         this.popIn();
       });
     } else {
-      this.externalWindow.focus();
+      this.popoutWindow.focus();
     }
   }
 }
