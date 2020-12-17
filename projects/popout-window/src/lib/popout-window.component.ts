@@ -97,52 +97,50 @@ export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
         top=${winTop}`
       );
 
-      this.popoutWindow.onload = ( () => {
-        this.popoutWindow.document.title = this.windowTitle ? this.windowTitle : window.document.title;
-        this.popoutWindow.document.body.style.margin = '0';
+      this.popoutWindow.document.title = this.windowTitle ? this.windowTitle : window.document.title;
+      this.popoutWindow.document.body.style.margin = '0';
 
-        if (!this.suppressCloneStyles) {
-          document.head.querySelectorAll('style').forEach(node => {
-            this.popoutWindow.document.head.appendChild(node.cloneNode(true));
-          });
+      if (!this.suppressCloneStyles) {
+        document.head.querySelectorAll('style').forEach(node => {
+          this.popoutWindow.document.head.appendChild(node.cloneNode(true));
+        });
 
-          document.head.querySelectorAll('link[rel="stylesheet"]').forEach(node => {
-            this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
-              `<link rel="stylesheet" type="${(node as HTMLLinkElement).type}" href="${(node as HTMLLinkElement).href}">`);
-          });
-
-          (document as any).fonts.forEach(node => {
-            (this.popoutWindow.document as any).fonts.add(node);
-          });
-        }
-
-        if (this.windowStyleUrl) {
+        document.head.querySelectorAll('link[rel="stylesheet"]').forEach(node => {
           this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
-            `<link rel="stylesheet" type="text/css" href="${window.location.origin}/${this.windowStyleUrl}">`);
-        }
+            `<link rel="stylesheet" type="${(node as HTMLLinkElement).type}" href="${(node as HTMLLinkElement).href}">`);
+        });
 
-        if (this.windowStyle) {
-          this.popoutWindow.document.head.insertAdjacentHTML('beforeend', `<style>${this.windowStyle}</style>`);
-        }
+        (document as any).fonts.forEach(node => {
+          (this.popoutWindow.document as any).fonts.add(node);
+        });
+      }
 
-        if (!this.windowTop) {
-          setTimeout(() => {
-            this.popoutWindow.moveBy(this.popoutWindow.innerWidth - this.popoutWindow.outerWidth,
-              this.popoutWindow.innerHeight - this.popoutWindow.outerHeight);
-          }, 50);
-        }
+      if (this.windowStyleUrl) {
+        this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
+          `<link rel="stylesheet" type="text/css" href="${window.location.origin}/${this.windowStyleUrl}">`);
+      }
 
-        const host = new DomPortalOutlet(
-          this.popoutWindow.document.body,
-          this.componentFactoryResolver,
-          this.applicationRef,
-          this.injector
-        );
-        if (this.portalOutlet.hasAttached()) {
-          this.portalOutlet.detach();
-        }
-        host.attach(this.portal);
-      });
+      if (this.windowStyle) {
+        this.popoutWindow.document.head.insertAdjacentHTML('beforeend', `<style>${this.windowStyle}</style>`);
+      }
+
+      // if (!this.windowTop) {
+      //   setTimeout(() => {
+      //     this.popoutWindow.moveBy(this.popoutWindow.innerWidth - this.popoutWindow.outerWidth,
+      //       this.popoutWindow.innerHeight - this.popoutWindow.outerHeight);
+      //   }, 50);
+      // }
+
+      const host = new DomPortalOutlet(
+        this.popoutWindow.document.body,
+        this.componentFactoryResolver,
+        this.applicationRef,
+        this.injector
+      );
+      if (this.portalOutlet.hasAttached()) {
+        this.portalOutlet.detach();
+      }
+      host.attach(this.portal);
       this.isOut = true;
 
       this.popoutWindow.addEventListener('unload', () => {
