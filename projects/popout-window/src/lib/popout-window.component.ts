@@ -1,32 +1,23 @@
 import {
-  AfterViewInit,
-  ApplicationRef,
   Component,
-  ComponentFactoryResolver,
   ElementRef,
   HostListener,
-  Injector,
-  Input, OnDestroy,
+  Input, OnDestroy, Renderer2,
   ViewChild
 } from '@angular/core';
-import {CdkPortal, CdkPortalOutlet, DomPortalOutlet} from '@angular/cdk/portal';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'popout-window',
   template: `
-    <ng-content *cdkPortal></ng-content>
-    <div #innerOutletWrapper style="width: 100%; height: 100%; overflow: auto;">
-      <ng-container *cdkPortalOutlet></ng-container>
+    <div #innerWrapper style="width: 100%; height: 100%; overflow: auto;">
+      <ng-content></ng-content>
     </div>
   `
 })
 
-export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
+export class PopoutWindowComponent implements OnDestroy  {
 
-  @ViewChild(CdkPortal) private portal: CdkPortal;
-  @ViewChild(CdkPortalOutlet) private portalOutlet: CdkPortalOutlet;
-  @ViewChild('innerOutletWrapper') private innerOutletWrapper: ElementRef;
+  @ViewChild('innerWrapper') private innerWrapper: ElementRef;
 
   @Input() windowWidth: number;
   @Input() windowHeight: number;
@@ -49,14 +40,9 @@ export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
   }
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private applicationRef: ApplicationRef,
-    private injector: Injector
+    private renderer2: Renderer2,
+    private elementRef: ElementRef
   ) {}
-
-  ngAfterViewInit(): void {
-    this.popIn();
-  }
 
   ngOnDestroy(): void {
     this.close();
@@ -71,22 +57,19 @@ export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
   }
 
   public popIn(): void {
-    if (!this.portalOutlet.hasAttached()) {
-      this.portalOutlet.attach(this.portal);
-    }
-
+    this.renderer2.appendChild(this.elementRef.nativeElement, this.innerWrapper.nativeElement);
     this.close();
   }
 
   public popOut(): void {
     if (!this.popoutWindow) {
-      const elmRect = this.innerOutletWrapper.nativeElement.getBoundingClientRect();
+      const elmRect = this.innerWrapper.nativeElement.getBoundingClientRect();
 
       const navHeight = window.outerHeight - window.innerHeight;
       const navWidth = window.outerWidth - window.innerWidth;
 
       const winLeft = this.windowLeft || window.screenX + navWidth + elmRect.left;
-      const winTop = this.windowTop || window.screenY + navHeight + elmRect.top;
+      const winTop = this.windowTop || window.screenY + navHeight + elmRect.top - 60;
 
       this.popoutWindow = window.open(
         '',
@@ -124,23 +107,7 @@ export class PopoutWindowComponent implements AfterViewInit, OnDestroy  {
         this.popoutWindow.document.head.insertAdjacentHTML('beforeend', `<style>${this.windowStyle}</style>`);
       }
 
-      // if (!this.windowTop) {
-      //   setTimeout(() => {
-      //     this.popoutWindow.moveBy(this.popoutWindow.innerWidth - this.popoutWindow.outerWidth,
-      //       this.popoutWindow.innerHeight - this.popoutWindow.outerHeight);
-      //   }, 50);
-      // }
-
-      const host = new DomPortalOutlet(
-        this.popoutWindow.document.body,
-        this.componentFactoryResolver,
-        this.applicationRef,
-        this.injector
-      );
-      if (this.portalOutlet.hasAttached()) {
-        this.portalOutlet.detach();
-      }
-      host.attach(this.portal);
+      this.renderer2.appendChild(this.popoutWindow.document.body, this.innerWrapper.nativeElement);
       this.isOut = true;
 
       this.popoutWindow.addEventListener('unload', () => {
