@@ -9,9 +9,7 @@ try the [online demo](https://shemesh.github.io/angular-popout-window/) to see s
 
 supports opening several child windows.
 
-thriving for a minimal footprint, ease of use, clean and compatible code. 
-
-...stay tuned.
+thriving for a minimal footprint, ease of use, clean and compatible code.
 
 ## Installation
 Install through npm:
@@ -53,9 +51,15 @@ you can override this by explicitly setting each of those properties for the new
 - `windowWidth` - width of window in pixels.
 - `windowHeight`  - height of window in pixels.
 
+use `windowStyle` property to apply styles on the child window, or `windowStyleUrl` to add a css file.
+
+`suppressCloneStyles` will skip the style cloning from parent to popped out window.
+
 when the popped out child window is closed, by pressing its X button for example, it will run `popIn()` to bring the content back inside.
 
 when the main page unload the popped window is closed.
+
+starting in version 3.0.0 the package depends on Angular/core only (removed the cdk dependency on).
 
 ## License
 
