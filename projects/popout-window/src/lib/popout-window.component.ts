@@ -2,7 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
-  Input, OnDestroy, Renderer2,
+  Input, EventEmitter, OnDestroy, Output, Renderer2,
   ViewChild
 } from '@angular/core';
 
@@ -30,9 +30,11 @@ export class PopoutWindowComponent implements OnDestroy  {
   @Input() get isPoppedOut(): boolean {
     return this.isOut;
   }
+  @Output() closed: EventEmitter<boolean> = new EventEmitter();
 
   private popoutWindow: Window;
   private isOut = false;
+  private observer: MutationObserver;
 
   @HostListener('window:beforeunload')
   private beforeunloadHandler(): void {
@@ -45,6 +47,7 @@ export class PopoutWindowComponent implements OnDestroy  {
   ) {}
 
   ngOnDestroy(): void {
+    this.observer.disconnect();
     this.close();
   }
 
@@ -53,6 +56,7 @@ export class PopoutWindowComponent implements OnDestroy  {
       this.popoutWindow.close();
       this.popoutWindow = null;
       this.isOut = false;
+      this.closed.next(true)
     }
   }
 
@@ -88,6 +92,8 @@ export class PopoutWindowComponent implements OnDestroy  {
           this.popoutWindow.document.head.appendChild(node.cloneNode(true));
         });
 
+        this.observeStyleChanges();
+
         document.head.querySelectorAll('link[rel="stylesheet"]').forEach(node => {
           this.popoutWindow.document.head.insertAdjacentHTML('beforeend',
             `<link rel="stylesheet" type="${(node as HTMLLinkElement).type}" href="${(node as HTMLLinkElement).href}">`);
@@ -116,5 +122,22 @@ export class PopoutWindowComponent implements OnDestroy  {
     } else {
       this.popoutWindow.focus();
     }
+  }
+
+  private observeStyleChanges() {
+    const node = document.querySelector('head');
+
+    this.observer?.disconnect();
+    this.observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeName === 'STYLE') {
+            this.popoutWindow.document.head.appendChild(node.cloneNode(true));
+          }
+        });
+      });
+    });
+
+    this.observer.observe(node, { childList: true });
   }
 }
