@@ -10,6 +10,7 @@ export class MainComponent implements OnInit {
 
   jahBless = 'Jah Bless';
   isChecked: any;
+  childShown = false;
   private rect;
 
   @ViewChild('resizableDiv') resizableDiv: ElementRef;

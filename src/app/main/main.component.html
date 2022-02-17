@@ -58,6 +58,13 @@
         binding jahBless:
         <input [(ngModel)]="jahBless" />
       </label>
+      <br>
+      <label>
+        show hidden child component
+        <input type="checkbox" [(ngModel)]="childShown"/>
+      </label>
+      <app-example-child *ngIf="childShown"></app-example-child>
+      <br />
       <br />
       <button (click)="windowComponent.popOut()" style="margin-right: 10px">pop me Out</button>
       <button (click)="windowComponent.popIn()">take me inside</button>
