@@ -56,7 +56,7 @@ export class PopoutWindowComponent implements OnDestroy  {
       this.popoutWindow.close();
       this.popoutWindow = null;
       this.isOut = false;
-      this.closed.next(true)
+      this.closed.next(true);
     }
   }
 
@@ -124,13 +124,13 @@ export class PopoutWindowComponent implements OnDestroy  {
     }
   }
 
-  private observeStyleChanges() {
-    const node = document.querySelector('head');
+  private observeStyleChanges(): void {
+    const docHead = document.querySelector('head');
 
     this.observer?.disconnect();
-    this.observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
+    this.observer = new MutationObserver((mutations: MutationRecord[]) => {
+      mutations.forEach((mutation: MutationRecord) => {
+        mutation.addedNodes.forEach((node: Node) => {
           if (node.nodeName === 'STYLE') {
             this.popoutWindow.document.head.appendChild(node.cloneNode(true));
           }
@@ -138,6 +138,6 @@ export class PopoutWindowComponent implements OnDestroy  {
       });
     });
 
-    this.observer.observe(node, { childList: true });
+    this.observer.observe(docHead, { childList: true });
   }
 }
