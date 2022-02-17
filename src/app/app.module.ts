@@ -5,11 +5,13 @@ import {FormsModule} from '@angular/forms';
 import { NgStartComponent } from './ng-start/ng-start.component';
 import {PopoutWindowModule} from '../../projects/popout-window/src/lib/popout-window.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { ExampleChildComponent } from './example-child/example-child.component';
 
 @NgModule({
   declarations: [
     MainComponent,
-    NgStartComponent
+    NgStartComponent,
+    ExampleChildComponent
   ],
   imports: [
     BrowserModule,
