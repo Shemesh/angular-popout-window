@@ -47,7 +47,7 @@ export class PopoutWindowComponent implements OnDestroy  {
   ) {}
 
   ngOnDestroy(): void {
-    this.observer.disconnect();
+    this.observer?.disconnect();
     this.close();
   }
 
