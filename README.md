@@ -61,6 +61,10 @@ when the main page unload the popped window is closed.
 
 starting in version 3.0.0 the package depends on Angular/core only (removed the cdk dependency on).
 
+## Versions
+note that version 4 is for ng14+.
+for ng13- you should use version 3.1.1
+
 ## License
 
 MIT
