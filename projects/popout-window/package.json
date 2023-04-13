@@ -1,6 +1,6 @@
 {
   "name": "angular-popout-window",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Angular library to popout part of your application to a new un-docked browser child window.",
   "license": "MIT",
   "homepage": "https://github.com/Shemesh/angular-popout-window",
