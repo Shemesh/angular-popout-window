@@ -99,9 +99,13 @@ export class PopoutWindowComponent implements OnDestroy  {
             `<link rel="stylesheet" type="${(node as HTMLLinkElement).type}" href="${(node as HTMLLinkElement).href}">`);
         });
 
-        (document as any).fonts.forEach(node => {
-          (this.popoutWindow.document as any).fonts.add(node);
-        });
+        try {
+          (document as any).fonts.forEach(node => {
+            (this.popoutWindow.document as any).fonts.add(node);
+          });
+        } catch (e) {
+          console.warn('PopoutWindowComponent: Unable to clone fonts.', e);
+        }
       }
 
       if (this.windowStyleUrl) {
